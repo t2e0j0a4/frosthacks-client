@@ -10,7 +10,7 @@ import { FiLogOut } from "react-icons/fi";
 import { CgProfile } from "react-icons/cg";
 import { FaStarOfLife } from "react-icons/fa";
 // import { LuStethoscope } from "react-icons/lu";
-// import { MdOutlineAddHome } from "react-icons/md";
+import { MdOutlineAddHome } from "react-icons/md";
 import { LuLayoutDashboard } from "react-icons/lu";
 
 const Sidebar = () => {
@@ -30,6 +30,7 @@ const Sidebar = () => {
                 <h1>Registered Hospital</h1>
                 <ul className={sidebar__nav}>
                     <li><Link href={"/dashboard"} className={`${pathname === '/dashboard' && page__active}`} ><LuLayoutDashboard fontSize={20}/><span>Dashboard</span></Link></li>
+                    <li><Link href={"/dashboard/allcases"} className={`${pathname === '/dashboard/allcases' && page__active}`} ><MdOutlineAddHome fontSize={20}/><span>All cases</span></Link></li>
                     <li><Link href={"/dashboard/livecases"} className={`${pathname.includes('/dashboard/livecases') && page__active}`} ><FaStarOfLife fontSize={20}/><span>Live Cases</span></Link></li>
                     <li><Link href={"/dashboard/settings"} className={`${pathname === '/dashboard/settings' && page__active}`} ><CgProfile fontSize={20}/><span>Profile</span></Link></li>
                 </ul>

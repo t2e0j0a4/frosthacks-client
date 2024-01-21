@@ -1,9 +1,9 @@
 import React from 'react'
-import StaffCards from '@/skeletons/staff/StaffCards'
+import CaseCards from '@/skeletons/cases/CaseCardsSkeleton/CaseCards'
 
 const loading = () => {
   return (
-    <StaffCards/>
+    <CaseCards/>
   )
 }
 

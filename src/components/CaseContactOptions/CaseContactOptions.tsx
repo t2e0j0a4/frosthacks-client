@@ -12,10 +12,7 @@ const CaseContactOptions = () => {
     
     return (
         <>
-            <HeadButton option={currentContactOption} setOption={setCurrentContactOption} label='Call' bgColor='#215FF2' />
-            <HeadButton option={currentContactOption} setOption={setCurrentContactOption} label='Talk' bgColor='#215FF2' />
-            <HeadButton option={currentContactOption} setOption={setCurrentContactOption} label='Documents' bgColor='#00CBFC' />
-            <HeadButton option={currentContactOption} setOption={setCurrentContactOption} label='Assign' bgColor='#3CC35E' />
+            <HeadButton option={currentContactOption} setOption={setCurrentContactOption} label='Video Request' bgColor='#215FF2' />
             <CaseContactPopup currentOption={currentContactOption} />
         </>
     )
@@ -26,12 +23,7 @@ export const HeadButton = ({bgColor, label, option, setOption}: { bgColor: strin
     return (
         <button title={label} style={{ backgroundColor: bgColor }} type='button' onClick={(e) => {
             (option === e.currentTarget.textContent) ? setOption('') : setOption(e.currentTarget.textContent as string);
-        }}>
-            {
-                label === 'Call' ? <MdCall fontSize={17}/> : label === 'Talk' ? <BsChatLeftText fontSize={17}/> : label === 'Documents' ? <MdDocumentScanner fontSize={17}/> : <MdOutlineAssignmentTurnedIn fontSize={17}/>
-            }
-            <p>{label}</p>
-        </button>
+        }}><MdCall fontSize={17}/><p>{label}</p></button>
     )
 }
 

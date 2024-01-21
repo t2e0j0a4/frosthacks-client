@@ -5,17 +5,18 @@ import styles from "./LiveCaseCard.module.css";
 // Types
 import { LiveCaseTypes } from '@/types';
 
-const LiveCaseCard = ({age, gender, caseType, _id }: LiveCaseTypes) => {
+const LiveCaseCard = ({age, gender, caseType, _id, name }: LiveCaseTypes) => {
 
     const {livecase__card, card__head, card__body} = styles;
 
     return (
         <article className={livecase__card}>
             <div className={card__head}>
-                <p>Case ID</p>
+                <p>Live Case</p>
                 <Link href={`/dashboard/livecases/${_id}`}>View Case</Link>
             </div>
             <div className={card__body}>
+                <CardBodyDetail name='Name' value={name} bgColor=""/>
                 <CardBodyDetail name='Gender' value={gender} bgColor=""/>
                 <CardBodyDetail name='Age' value={age} bgColor=""/>
                 <CardBodyDetail name='Case Type' value={caseType} bgColor=""/>

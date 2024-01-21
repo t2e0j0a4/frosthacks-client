@@ -9,7 +9,7 @@ import { CiLocationOn } from "react-icons/ci";
 import { CgBoy, CgGirl } from "react-icons/cg";
 import { AiOutlineHeart } from "react-icons/ai";
 import { MdSpatialAudioOff } from "react-icons/md";
-// import { FaTemperatureHalf } from "react-icons/fa6";
+import { FaTemperatureHalf } from "react-icons/fa6";
 import { IoIosPulse, IoMdEye } from "react-icons/io";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { BiSolidUserRectangle } from "react-icons/bi";
@@ -20,16 +20,48 @@ import { BsHeartPulse, BsArrowDownShort, BsArrowUpShort, BsDropletHalf } from "r
 // Components
 import CaseContactOptions from '@/components/CaseContactOptions/CaseContactOptions';
 import VitalsChart from '@/components/VitalsChart/VitalsChart';
+import { LiveCaseTypes } from '@/types';
+import { cookies } from 'next/headers';
 
-// Updated as a Dynamic Metadata if needed later, but as of now just a static Metadata
 export const metadata: Metadata = {
-  title: "Case ID : abc123 | Live Cases",
-  description: "Current Case with a Case ID of abc123 Assignment",
+  title: `Case | Live Cases`,
+  description: "Current Case with a Case ID of Assignment",
 };
 
-const page = ({params}: {params: { case: string }}) => {
+// Fetch for a Case Details
+
+const fetchACase = async (caseId: string) => {
+
+    try {
+        
+        const caseResponse = await fetch(`https://frosthacks-backend.onrender.com/api/v1/hospital/cases/${caseId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${cookies().get('hospAdminToken')?.value}`
+            }
+        })
+
+        if (!caseResponse.ok) {
+            console.log(await caseResponse.json())
+            throw new Error("Could not get the data");
+        }
+
+        const caseData: { case: LiveCaseTypes } = await caseResponse.json();
+
+        return caseData.case;
+
+
+    } catch (error) {
+        throw new Error('Server issue while loading case details...');
+    }
+
+}
+
+const page = async ({params}: {params: { case: string }}) => {
 
     const { current__case, case__head, head__side, head__talk, livecase__main, general__info, patient__info, info__head, info__caseId, patient__case, general__title, case__details, patient__vitals, vitals__details, other__info, vitals__charts, paramedic__loc, paramedic__map, health__info, healthInfo__main } = styles;
+
+    const caseDetails: LiveCaseTypes = await fetchACase(params.case);
 
     return (
         <main className={current__case}>
@@ -55,26 +87,25 @@ const page = ({params}: {params: { case: string }}) => {
                 <div className={general__info}>
 
                     <section className={patient__info}>
-                        <div role='heading' aria-level={1} className={info__head}><CgBoy fontSize={24} color="#686868" /><p>John Doe</p></div>
-                        <div className={info__caseId}><p>Case ID</p><p>{params.case}</p></div>
+                        <div role='heading' aria-level={1} className={info__head}><CgBoy fontSize={24} color="#686868" /><p>{caseDetails.name}</p></div>
                     </section>
 
                     <section className={patient__case}>
                         <div role='heading' aria-level={2} className={general__title}><BiSolidUserRectangle fontSize={18} color="#215FFA"/><p>General Information</p></div>
                         <div className={case__details}>
-                            <CardBodyDetail name='Age' value={24} bgColor="#FFF"/>
-                            <CardBodyDetail name='Gender' value='Male' bgColor="#FFF"/>
-                            <CardBodyDetail name='Case Type' value='Heart Stroke' bgColor="#FFF"/>
+                            <CardBodyDetail name='Age' value={caseDetails.age} bgColor="#FFF"/>
+                            <CardBodyDetail name='Gender' value={caseDetails.gender} bgColor="#FFF"/>
+                            <CardBodyDetail name='Case Type' value={caseDetails.caseType} bgColor="#FFF"/>
                         </div>
-                        <p>3.2 km away. Takes 9 minutes 44 seconds to reach here.</p>
                     </section>
 
                     <section className={patient__vitals}>
                         <div role='heading' aria-level={2} className={general__title}><BsHeartPulse fontSize={18} color="red"/><p>Vital Information</p></div>
                         <div className={vitals__details}>
-                            <VitalInfoCard label='Blood Pressure' HeadIcon={BsArrowUpShort} VitalIcon={AiOutlineHeart} vitalInfo='180/120' infoOutput='Hypertensive Crisis' bgColor='#AD2E24' />
-                            <VitalInfoCard label='Heart Rate' HeadIcon={BsArrowDownShort} VitalIcon={IoIosPulse} vitalInfo='80 BPM' infoOutput='Normal' bgColor='#41CB68' />
-                            <VitalInfoCard label='SPO2' HeadIcon={BsArrowUpShort} VitalIcon={BsDropletHalf} vitalInfo='96%' infoOutput='Insufficient' bgColor='#FADA33' />
+                            <VitalInfoCard label='Blood Pressure' HeadIcon={BsArrowUpShort} VitalIcon={AiOutlineHeart} vitalInfo={caseDetails.bp} infoOutput='Hypertensive Crisis' bgColor='#AD2E24' />
+                            <VitalInfoCard label='Heart Rate' HeadIcon={BsArrowDownShort} VitalIcon={IoIosPulse} vitalInfo={`${caseDetails.heartRate} BPM`} infoOutput='Normal' bgColor='#41CB68' />
+                            <VitalInfoCard label='SPO2' HeadIcon={BsArrowUpShort} VitalIcon={BsDropletHalf} vitalInfo={`${caseDetails.spo2}%`} infoOutput='Insufficient' bgColor='#FADA33' />
+                            <VitalInfoCard label='Temperature' HeadIcon={FaTemperatureHalf} VitalIcon={FaTemperatureHalf} vitalInfo={`${caseDetails.temperature}F`} infoOutput='Controlled' bgColor='#a2db13' />
                         </div>
                     </section>
 
@@ -90,10 +121,10 @@ const page = ({params}: {params: { case: string }}) => {
                     
                     <section className={health__info}>
 
-                        <GlucoMeter glucoScore={7} verdict='Danger' />
-                        <HealthDetailCard Icon={IoMdEye} iconColor='#65478F' label='Eye Response' count={2} countFor='Pressure'/>
-                        <HealthDetailCard Icon={MdSpatialAudioOff} iconColor='#30b7f5' label='Verbal Response' count={4} countFor='Confused'/>
-                        <HealthDetailCard Icon={FaHandPaper} iconColor='#a05efd' label='Motor Response' count={1} countFor='Confused'/>
+                        <GlucoMeter glucoScore={caseDetails.eyeResponse + caseDetails.verbalResponse + caseDetails.motorResponse} verdict='Danger' />
+                        <HealthDetailCard Icon={IoMdEye} iconColor='#65478F' label='Eye Response' count={caseDetails.eyeResponse} countFor='Pressure'/>
+                        <HealthDetailCard Icon={MdSpatialAudioOff} iconColor='#30b7f5' label='Verbal Response' count={caseDetails.verbalResponse} countFor='Confused'/>
+                        <HealthDetailCard Icon={FaHandPaper} iconColor='#a05efd' label='Motor Response' count={caseDetails.motorResponse} countFor='Confused'/>
 
                     </section>
 

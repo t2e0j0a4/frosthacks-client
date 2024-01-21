@@ -1,4 +1,4 @@
-.hospital__staff {
+.dashboard__livecases {
     width: 100%;
     max-width: 1800px;
     margin: 0 auto;
@@ -7,7 +7,7 @@
     padding-left: 260px;
 }
 
-.staff__head {
+.livecases__head {
     width: 100%;
     height: 100%;
     padding: 0.6rem 1rem;
@@ -20,38 +20,45 @@
     gap: 0.8rem;
 }
 
-.staff__head p {
+.livecases__head p {
     font-size: 1.2rem;
     font-weight: 500;
-    color: #484848;
+    color: #BA1A1A;
 }
 
-.staff__deregister {
+.livecases__main {
     width: 100%;
-    margin-top: 1.6rem;
     height: 100%;
+    margin-top: 1.6rem;
+
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(276px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-rows: auto;
+    place-content: start;
+    gap: 1.2rem 0.8rem;
 }
 
-@media (hover: hover) and (pointer: fine) {
-    .staff__head a:hover, .staff__head a:focus-visible {
-        border: 1.2px solid #215FFA;
-        color: #215FFA;
+@media all and (width >= 1440px) {
+
+    /* .livecases__main {
+        grid-template-columns: repeat(auto 280px);
+    } */
+
+}
+
+@media all and (width <= 600px) {
+
+    .livecases__main {
+        grid-template-columns: repeat(1, 100%);
+        justify-content: center;
+        gap: 1rem;
     }
-}
 
-.staff__head p {
-    font-size: 1.2rem;
-    font-weight: 500;
-    color: #484848;
-    flex-grow: 1;
 }
 
 @media all and (width <= 980px) {
 
-    .hospital__staff {
+    .dashboard__livecases {
         padding: 1.2rem;
     }
 
@@ -59,7 +66,7 @@
 
 @media all and (width <= 600px) {
 
-    .hospital__staff {
+    .dashboard__livecases {
         padding: 1rem 0.8rem;
     }
 
