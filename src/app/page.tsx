@@ -26,9 +26,9 @@ const Login = () => {
           ) : (
             <form className={login__main} action={userLogin}>
               <h1>Login</h1>
-              <input name='email' type="text" placeholder='Email' aria-label='Email'/>
+              <input required name='email' type="text" placeholder='Email' aria-label='Email'/>
               <div className={login__pass}>
-                <input type="password" placeholder='Password' aria-label='Password' name='password' />
+                <input required type="password" placeholder='Password' aria-label='Password' name='password' />
                 <Link href={"/auth/forgotpassword"}>Forgot Password?</Link>
               </div>
               <div className={login__submit}>
